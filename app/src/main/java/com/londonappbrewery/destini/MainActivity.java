@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     // Holds the current story id
     private int mCurrentStory;
 
+    // Holds all the possible endings
+    private ArrayList<Integer> endings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
 
         mCurrentStory = R.string.T1_Story;
         mPath = new HashMap<Integer, Level>();
+
+        // Create and populate the array for the endings
+        endings = new ArrayList<Integer>(3);
+        endings.add(R.string.T4_End);
+        endings.add(R.string.T5_End);
+        endings.add(R.string.T6_End);
 
         // Level T1
         mPath.put(
@@ -80,7 +89,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeLevel(Level level) {
         mStory.setText(mCurrentStory);
-        mButtonTop.setText(level.getAns1());
-        mButtonBottom.setText(level.getAns2());
+        // If the current story is one of the endings then
+        // hide the buttons
+        if (endings.contains(mCurrentStory)) {
+            mButtonTop.setVisibility(View.GONE);
+            mButtonBottom.setVisibility(View.GONE);
+        } else {
+            mButtonTop.setText(level.getAns1());
+            mButtonBottom.setText(level.getAns2());
+        }
     }
 }
