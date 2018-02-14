@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         mButtonTop = (Button) findViewById(R.id.buttonTop);
         mButtonBottom = (Button) findViewById(R.id.buttonBottom);
 
-        mCurrentStory = R.string.T1_Story;
         mPath = new HashMap<Integer, Level>();
 
         // Create and populate the array for the endings
@@ -67,6 +66,17 @@ public class MainActivity extends AppCompatActivity {
             new Level(R.string.T3_Ans1, R.string.T3_Ans2, R.string.T6_End, R.string.T5_End)
         );
 
+        // Init the current story to 1
+        mCurrentStory = R.string.T1_Story;
+
+        // If there is a saved instance then use the saved story point
+        if (savedInstanceState != null) {
+            mCurrentStory = savedInstanceState.getInt("CurrentStory");
+        }
+
+        // Update the story to the correct point
+        changeLevel(mPath.get(mCurrentStory));
+
         // TODO: Steps 6, 7, & 9 - Set a listener on the top button:
         mButtonTop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
                 changeLevel(mPath.get(mCurrentStory));
             }
         });
-
     }
 
     private void changeLevel(Level level) {
@@ -98,5 +107,12 @@ public class MainActivity extends AppCompatActivity {
             mButtonTop.setText(level.getAns1());
             mButtonBottom.setText(level.getAns2());
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save the current story point
+        outState.putInt("CurrentStory", mCurrentStory);
     }
 }
